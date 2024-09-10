@@ -1,5 +1,5 @@
 # Pac - Man
-### Why?
+### <ins>Why?</ins>
 Played with father-in-law on PS5
 Childhood of gaming, learned to code for career purposes, but never took time to explore science behind hobby
 Iconic, recognisable, but simple
@@ -10,11 +10,11 @@ Create and deploy using familiar technologies for an end-to-end portfolio piece
 The idea of Pac-Man was taken from both the image of a pizza with a slice removed and from rounding out the Japanese symbol 口 (kuchi, lit. "mouth"). The character was made to be cute and colorful to appeal to younger players, particularly women. In Japan, he was titled "Puckman" for his hockey puck-like shape, which was changed in international releases to prevent defacement of the arcade cabinets by changing the P into an F.
 
 Pac-Man has the highest-brand awareness of any video game character in North America, becoming an icon in video games and pop culture. He is credited as the first video game mascot character and the first to receive merchandise. He also appears as a playable guest character in some other games, most notably in the Super Smash Bros. series (specifically in the fourth and fifth installments) and in the Ridge Racer series."
-
-### How?
+***
+### <ins>How?</ins>
 * https://chriscourses.com/courses/pacman/videos/create-a-pacman-game| https://www.youtube.com/watch?v=5IMXpp3rohQ 
-
-### CheckList
+***
+### <ins>CheckList</ins>
 ###### Basic
 1. Project Setup
 2. Generate Map Boundaries

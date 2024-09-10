@@ -4,4 +4,54 @@ const c = canvas.getContext('2d');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-// console.log(canvas);
+class Boundary {
+  static width = 40;
+  static height = 40;
+  constructor({ position }) {
+    this.position = position;
+    this.width = 40;
+    this.height = 40;
+  }
+
+  draw() {
+    c.fillStyle = 'blue';
+    c.fillRect(
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+  }
+};
+
+// //
+const map = [
+  ['-', '-', '-', '-', '-', '-',],
+  ['-', ' ', ' ', ' ', ' ', '-',],
+  ['-', ' ', '-', '-', ' ', '-',],
+  ['-', ' ', ' ', ' ', ' ', '-',],
+  ['-', '-', '-', '-', '-', '-',],
+];
+
+const boundaries = [];
+// 
+map.forEach((row, rowIndex) => {
+  row.forEach((mapUnitSquare, columnIndex) => {
+    switch (mapUnitSquare) {
+      case '-':
+        boundaries.push(
+          new Boundary({
+            position: {
+              x: Boundary.width  * columnIndex,
+              y: Boundary.height * rowIndex
+            }
+          })
+        );
+        break;
+    };
+  });
+});
+
+boundaries.forEach((boundary) => {
+  boundary.draw();
+});
