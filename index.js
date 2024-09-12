@@ -7,126 +7,6 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 // 
-// Classes
-class Boundary {
-  static width  = 40;
-  static height = 40;
-  constructor({ position, image }) {
-    this.position = position;
-    this.image = image;
-    this.width  = 40;
-    this.height = 40;
-  }
-
-  draw() {
-    c.drawImage(this.image, this.position.x, this.position.y);
-  }
-};
-
-class Player {
-  constructor({ position, velocity }) {
-    this.position = position;
-    this.velocity = velocity;
-    this.radius = 15;
-  };
-
-  draw() {
-    c.beginPath();
-    c.arc(
-      this.position.x,
-      this.position.y,
-      this.radius,
-      0,
-      Math.PI * 2
-    );
-    c.fillStyle = 'yellow';
-    c.fill();
-    c.closePath();
-  };
-
-  update() {
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-  };
-};
-
-class Ghost {
-  static speed = 2;
-  constructor({ position, velocity, color = 'red' }) {
-    this.position = position;
-    this.velocity = velocity;
-    this.color = color;
-    this.radius = 15;
-    this.prevCollisions = [];
-    this.speed = 2;
-    this.scared = false;
-  };
-
-  draw() {
-    c.beginPath();
-    c.arc(
-      this.position.x,
-      this.position.y,
-      this.radius,
-      0,
-      Math.PI * 2
-    );
-    c.fillStyle = this.scared ? 'blue' : this.color;
-    c.fill();
-    c.closePath();
-  };
-
-  update() {
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-  };
-};
-
-class Pellet {
-  constructor({ position }) {
-    this.position = position;
-    this.radius = 3;
-  };
-
-  draw() {
-    c.beginPath();
-    c.arc(
-      this.position.x,
-      this.position.y,
-      this.radius,
-      0,
-      Math.PI * 2
-    );
-    c.fillStyle = 'white';
-    c.fill();
-    c.closePath();
-  };
-};
-
-class PowerUp {
-  constructor({ position }) {
-    this.position = position;
-    this.radius = 8;
-  };
-
-  draw() {
-    c.beginPath();
-    c.arc(
-      this.position.x,
-      this.position.y,
-      this.radius,
-      0,
-      Math.PI * 2
-    );
-    c.fillStyle = 'white';
-    c.fill();
-    c.closePath();
-  };
-};
-
-// 
 // Declarations
 const pellets = [];
 const boundaries = [];
@@ -509,6 +389,11 @@ function animate() {
     };
   };
 
+  // win condition goes here
+  if (pellets.length === 1) { // should be zero - not sure where extra pellet comes from
+    console.log('win.')
+    cancelAnimationFrame(animationId);
+  };
 
   for (let i = powerUps.length - 1; 0 <= i; i--) {
     const powerUp = powerUps[i];
@@ -658,7 +543,13 @@ function animate() {
       // 
     };
   });
-};
+  // 
+  if (player.velocity.x > 0 ) player.rotation = 0;
+  else if (player.velocity.x < 0 ) player.rotation = Math.PI;
+  else if (player.velocity.y > 0 ) player.rotation = Math.PI / 2;
+  else if (player.velocity.y < 0 ) player.rotation = Math.PI * 1.5;
+  // 
+}; // end of animate()
 
 animate();
 // 
