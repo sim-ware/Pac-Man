@@ -5,7 +5,7 @@ const scoreEl = document.querySelector('#scoreEl');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-
+ 
 // 
 // Declarations
 const pellets = [];
@@ -65,12 +65,6 @@ const map = [
   ['|', '.', '.', '.', '.', '.', '.', '.', '.', 'p', '|'],
   ['4', '-', '-', '-', '-', '-', '-', '-', '-', '-', '3']
 ]
-
-function createImage(src) {
-  const image = new Image();
-  image.src = src;
-  return image;
-};
 
 map.forEach((row, i) => {
   row.forEach((symbol, j) => {
@@ -277,17 +271,6 @@ map.forEach((row, i) => {
     }
   })
 })
-
-// Collision Detection //
-function circleCollidesWithRectangle({ circle, rectangle }) {
-  const padding = Boundary.width / 2 - circle.radius - 1;
-  return (
-    circle.position.y - circle.radius + circle.velocity.y <= rectangle.position.y + rectangle.height + padding &&
-    circle.position.x + circle.radius + circle.velocity.x >= rectangle.position.x - padding &&
-    circle.position.y + circle.radius + circle.velocity.y >= rectangle.position.y - padding &&
-    circle.position.x - circle.radius + circle.velocity.x <= rectangle.position.x + rectangle.width + padding
-  );
-};
 
 // Animation //
 let animationId;
