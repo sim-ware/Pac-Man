@@ -28,6 +28,78 @@ class Player {
     c.restore();
   };
 
+  moveUp(boundaries) {
+    for (let i = 0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+      if (
+        circleCollidesWithRectangle({
+          circle: {
+            ...this,
+            velocity: { x: 0, y: -5 }
+          },
+          rectangle: boundary
+        })
+      ) {
+        this.velocity.y = 0;
+        break;
+      } else this.velocity.y = -5
+    };
+  };
+
+  moveLeft(boundaries) {
+    for (let i = 0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+      if (
+        circleCollidesWithRectangle({
+          circle: {
+            ...this,
+            velocity: { x: -5, y: 0 }
+          },
+          rectangle: boundary
+        })
+      ) {
+        this.velocity.x = 0;
+        break;
+      } else this.velocity.x = -5
+    };
+  };
+
+  moveDown(boundaries) {
+    for (let i = 0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+      if (
+        circleCollidesWithRectangle({
+          circle: {
+            ...this,
+            velocity: { x: 0, y: 5 }
+          },
+          rectangle: boundary
+        })
+      ) {
+        this.velocity.y = 0;
+        break;
+      } else this.velocity.y = 5
+    };
+  };
+
+  moveRight(boundaries) {
+    for (let i = 0; i < boundaries.length; i++) {
+      const boundary = boundaries[i];
+      if (
+        circleCollidesWithRectangle({
+          circle: {
+            ...this,
+            velocity: { x: 5, y: 0 }
+          },
+          rectangle: boundary
+        })
+      ) {
+        this.velocity.x = 0;
+        break;
+      } else this.velocity.x = 5
+    };
+  };
+
   update() {
     this.draw();
     this.position.x += this.velocity.x;
