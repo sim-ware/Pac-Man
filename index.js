@@ -50,6 +50,7 @@ const keys = {
 let lastKey = '';
 let score = 0;
 let animationId;
+let prevMs = Date.now();
 
 const boundaries = generateBoundaries();
 
@@ -57,10 +58,14 @@ function animate() {
   animationId = requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (keys.w.pressed && lastKey === 'w') player.moveUp(boundaries);
-  if (keys.a.pressed && lastKey === 'a') player.moveLeft(boundaries);
-  if (keys.s.pressed && lastKey === 's') player.moveDown(boundaries);
-  if (keys.d.pressed && lastKey === 'd') player.moveRight(boundaries);
+  const currentMs = Date.now();
+  const delta = (currentMs - prevMs) / 1000;
+  prevMs = currentMs;
+
+  if (keys.w.pressed && lastKey === 'w') player.move('up');
+  if (keys.a.pressed && lastKey === 'a') player.move('left');
+  if (keys.s.pressed && lastKey === 's') player.move('down');
+  if (keys.d.pressed && lastKey === 'd') player.move('right');
 
   // detect collision between ghosts and player
   for (let i = ghosts.length - 1; 0 <= i; i--) {
@@ -126,20 +131,9 @@ function animate() {
     }
   };
 
-  boundaries.forEach((boundary) => {
-    boundary.draw();
-    if (
-      circleCollidesWithRectangle({
-        circle: player,
-        rectangle: boundary
-      })
-    ) {
-      player.velocity.x = 0;
-      player.velocity.y = 0;
-    };
-  });
+  boundaries.forEach((boundary) => boundary.draw());
   
-  player.update();
+  player.update(delta, boundaries);
 
   ghosts.forEach(ghost => {
     ghost.update();
