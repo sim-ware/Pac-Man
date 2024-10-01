@@ -16,7 +16,8 @@ const ghosts = [
       x: Boundary.width * 6 + Boundary.width/2,
       y: Boundary.height + Boundary.height/2 
     },
-    velocity: { x: Ghost.speed, y: 0 }
+    velocity: { x: Ghost.speed, y: 0 },
+    imgSrc: './img/sprites/redGhost.png'
   }),
   new Ghost({
     position: { 
@@ -24,7 +25,7 @@ const ghosts = [
       y: Boundary.height * 3 + Boundary.height/2 
     },
     velocity: { x: Ghost.speed, y: 0 },
-    color: 'pink'
+    imgSrc: './img/sprites/greenGhost.png'
   })
 ];
 
