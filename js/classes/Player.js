@@ -1,4 +1,5 @@
 const SPEED = 200;
+const CHOMP_RATE = 30;
 
 class Player {
   constructor({ position, velocity }) {
@@ -62,6 +63,15 @@ class Player {
     return false;
   };
 
+  snapToGrid() {
+    const CELL_SIZE = 20;
+
+    this.position = {
+      x: Math.round(this.position.x / CELL_SIZE) * CELL_SIZE,
+      y: Math.round(this.position.y / CELL_SIZE) * CELL_SIZE,
+    };
+  };
+
   isValidMove(boundaries) {
     const PIXEL_BUFFER = 5;
     for (const boundary of boundaries) {
@@ -83,15 +93,6 @@ class Player {
     return true;
   };
 
-  snapToGrid() {
-    const CELL_SIZE = 20;
-
-    this.position = {
-      x: Math.round(this.position.x / CELL_SIZE) * CELL_SIZE,
-      y: Math.round(this.position.y / CELL_SIZE) * CELL_SIZE,
-    };
-  };
-
   update(delta, boundaries) {
     this.draw();
 
@@ -111,7 +112,9 @@ class Player {
     };
     //
 
+    // chompcode
     if (this.radians < 0 || this.radians > 0.75) this.openRate = -this.openRate;
-    this.radians += this.openRate;
+    this.radians = Math.max(0, Math.min(this.radians, 0.75));
+    this.radians += this.openRate * delta * CHOMP_RATE;
   };
 };

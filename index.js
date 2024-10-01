@@ -135,107 +135,12 @@ function animate() {
   
   player.update(delta, boundaries);
 
-  ghosts.forEach(ghost => {
-    ghost.update();
+  ghosts.forEach(ghost => ghost.update(delta, boundaries));
 
-    // detect for collision for every single boundary within course
-    const collisions = [];
-    boundaries.forEach((boundary) => {
-      if (
-        !collisions.includes('right') &&
-        circleCollidesWithRectangle({
-          circle: {
-            ...ghost,
-            velocity: { x: ghost.speed, y: 0 }
-          },
-          rectangle: boundary
-        })
-      ) {
-        collisions.push('right');
-      };
-
-      if (
-        !collisions.includes('left') &&
-        circleCollidesWithRectangle({
-          circle: {
-            ...ghost,
-            velocity: { x: -ghost.speed, y: 0 }
-          },
-          rectangle: boundary
-        })
-      ) {
-        collisions.push('left');
-      };
-
-      if (
-        !collisions.includes('up') &&
-        circleCollidesWithRectangle({
-          circle: {
-            ...ghost,
-            velocity: { x: 0, y: -ghost.speed }
-          },
-          rectangle: boundary
-        })
-      ) {
-        collisions.push('up');
-      };
-
-      if (
-        !collisions.includes('down') &&
-        circleCollidesWithRectangle({
-          circle: {
-            ...ghost,
-            velocity: { x: 0, y: ghost.speed }
-          },
-          rectangle: boundary
-        })
-      ) {
-        collisions.push('down');
-      };
-    });
-    if (collisions.length > ghost.prevCollisions.length) ghost.prevCollisions = collisions;
-
-    if (JSON.stringify(collisions) != JSON.stringify(ghost.prevCollisions)) {
-
-      if (ghost.velocity.x > 0) ghost.prevCollisions.push('right')
-      else if (ghost.velocity.x < 0) ghost.prevCollisions.push('left')
-      else if (ghost.velocity.y < 0) ghost.prevCollisions.push('up')
-      else if (ghost.velocity.y > 0) ghost.prevCollisions.push('down')
-
-      const pathways = ghost.prevCollisions.filter((collision) => {
-        return !collisions.includes(collision);
-      });
-      const direction = pathways[Math.floor(Math.random() * pathways.length)]
-
-      switch (direction) {
-        case 'down':
-          ghost.velocity.y = ghost.speed;
-          ghost.velocity.x = 0;
-          break
-        case 'up':
-          ghost.velocity.y = -ghost.speed;
-          ghost.velocity.x = 0;
-          break
-        case 'right':
-          ghost.velocity.y = 0;
-          ghost.velocity.x = ghost.speed;
-          break
-        case 'left':
-          ghost.velocity.y = 0;
-          ghost.velocity.x = -ghost.speed;
-          break
-      };
-
-      ghost.prevCollisions = [];
-      // 
-    };
-  });
-  // 
   if (player.velocity.x > 0 ) player.rotation = 0;
   else if (player.velocity.x < 0 ) player.rotation = Math.PI;
   else if (player.velocity.y > 0 ) player.rotation = Math.PI / 2;
   else if (player.velocity.y < 0 ) player.rotation = Math.PI * 1.5;
-  // 
-}; // end of animate()
+};
 
 animate();
