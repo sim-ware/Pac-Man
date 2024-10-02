@@ -117,7 +117,11 @@ class Player {
   die() {
     this.state = 'initDeath';
     gsap.to(this, {
-      radians: Math.PI - 0.00001
+      radians: Math.PI - 0.00001,
+      onComplete: () => setTimeout(() => {
+        game.init();      // maybe change _____init to 'reset'?
+        game.initStart(); // maybe change initStart to 'start'?
+      }, 750),
     });
   };
 

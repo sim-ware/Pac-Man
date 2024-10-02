@@ -10,64 +10,9 @@ canvas.height = innerHeight;
 // Declarations
 const pellets = [];
 const powerUps = [];
-const ghosts = [
-  new Ghost({
-    position: { 
-      x: Boundary.width * 5 + Boundary.width/2,
-      y: Boundary.height * 5 + Boundary.height/2 
-    },
-    velocity: { 
-      x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
-      y: 0
-    },
-    imgSrc: './img/sprites/redGhost.png',
-    state: 'active',
-  }),
-  new Ghost({
-    position: { 
-      x: Boundary.width * 4 + Boundary.width/2,
-      y: Boundary.height * 6 + Boundary.height/2 
-    },
-    velocity: { 
-      x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
-      y: 0
-    },
-    imgSrc: './img/sprites/greenGhost.png',
-  }),
-  new Ghost({
-    position: { 
-      x: Boundary.width * 5 + Boundary.width/2,
-      y: Boundary.height * 6 + Boundary.height/2 
-    },
-    velocity: { 
-      x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
-      y: 0
-    },
-    imgSrc: './img/sprites/orangeGhost.png',
-  }),
-  new Ghost({
-    position: { 
-      x: Boundary.width * 6 + Boundary.width/2,
-      y: Boundary.height * 6 + Boundary.height/2 
-    },
-    velocity: { 
-      x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
-      y: 0
-    },
-    imgSrc: './img/sprites/yellowGhost.png',
-  })
-];
 
-const player = new Player({
-  position: {
-    x: Boundary.width + Boundary.width/2,
-    y: Boundary.height + Boundary.height/2
-  },
-  velocity: {
-    x: 0,
-    y: 0  
-  },
-});
+let ghosts = [];
+let player = {};
 
 const keys = {
   w : { pressed: false},
@@ -83,8 +28,86 @@ let animationId;
 let prevMs = Date.now();
 let accumulatedTime = 0;
 const ghostReleaseIntervals = [0, 5, 10, 15];
-
 const boundaries = generateBoundaries();
+
+const game = {
+  init() {
+    accumulatedTime = 0;
+
+    player  = new Player({
+      position: {
+        x: Boundary.width + Boundary.width/2,
+        y: Boundary.height + Boundary.height/2
+      },
+      velocity: {
+        x: 0,
+        y: 0  
+      },
+    });
+
+    ghosts = [
+      new Ghost({
+        position: { 
+          x: Boundary.width * 5 + Boundary.width/2,
+          y: Boundary.height * 5 + Boundary.height/2 
+        },
+        velocity: { 
+          x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
+          y: 0
+        },
+        imgSrc: './img/sprites/redGhost.png',
+        state: 'active',
+      }),
+      new Ghost({
+        position: { 
+          x: Boundary.width * 4 + Boundary.width/2,
+          y: Boundary.height * 6 + Boundary.height/2 
+        },
+        velocity: { 
+          x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
+          y: 0
+        },
+        imgSrc: './img/sprites/greenGhost.png',
+      }),
+      new Ghost({
+        position: { 
+          x: Boundary.width * 5 + Boundary.width/2,
+          y: Boundary.height * 6 + Boundary.height/2 
+        },
+        velocity: { 
+          x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
+          y: 0
+        },
+        imgSrc: './img/sprites/orangeGhost.png',
+      }),
+      new Ghost({
+        position: { 
+          x: Boundary.width * 6 + Boundary.width/2,
+          y: Boundary.height * 6 + Boundary.height/2 
+        },
+        velocity: { 
+          x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
+          y: 0
+        },
+        imgSrc: './img/sprites/yellowGhost.png',
+      })
+    ];
+  },
+  initStart() {
+    player.state = 'paused';
+    ghosts.forEach(ghost => ghost.state = 'paused');
+
+    setTimeout(() => {
+      player.state    = 'active';
+      ghosts[0].state = 'active';
+      ghosts[1].state = null;
+      ghosts[2].state = null;
+      ghosts[3].state = null;
+    }, 1000);
+  },
+};
+
+game.init();
 
 function animate() {
   animationId = requestAnimationFrame(animate);
@@ -94,7 +117,7 @@ function animate() {
   const delta = (currentMs - prevMs) / 1000;
   prevMs = currentMs;
 
-  accumulatedTime += delta;
+  if (player.state === 'active') accumulatedTime += delta;
 
   if (keys.w.pressed && lastKey === 'w') player.move('up');
   if (keys.a.pressed && lastKey === 'a') player.move('left');
