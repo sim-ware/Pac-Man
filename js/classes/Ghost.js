@@ -2,7 +2,7 @@ const GHOST_SPEED = 75;
 
 class Ghost {
   static speed = 1;
-  constructor({ position, velocity, color = 'red', imgSrc }) {
+  constructor({ position, velocity, color = 'red', imgSrc, state }) {
     this.position = position;
     this.velocity = velocity;
     this.color = color;
@@ -19,6 +19,7 @@ class Ghost {
     this.maxFrames = 8;
     this.currentFrame = 0;
     this.elapsedTime = 0;
+    this.state = state;
   };
 
   draw() {
@@ -142,10 +143,22 @@ class Ghost {
     };
   };
 
-  update(delta, boundaries) {
-    this.draw();
-    this.updateFrames(delta);
-    
+  enterGame() {
+    this.state = 'enteringGame';
+
+    const timeline = gsap.timeline();
+
+    timeline.to(this.position, {
+      x: Boundary.width * 5 + Boundary.width/2,
+    });
+
+    timeline.to(this.position, {
+      y: Boundary.height * 5 + Boundary.height/2,
+      onComplete: () => this.state = 'active'
+    });
+  };
+
+  move(delta, boundaries) {
     const validMoves = this.gatherValidMoves(boundaries);
 
     if (validMoves.length > 0 && validMoves.length !== this.previousValidMoves.length) {
@@ -166,5 +179,18 @@ class Ghost {
     };
 
     this.previousValidMoves = validMoves;
+  };
+
+  update(delta, boundaries) {
+    this.draw();
+    this.updateFrames(delta);
+
+    // 
+    switch (this.state) {
+      case 'active':
+        this.move(delta, boundaries);
+        break;
+    };
+    // //
   };
 };
