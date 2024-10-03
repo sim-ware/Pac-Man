@@ -1,13 +1,36 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-
 const scoreEl = document.querySelector('#scoreEl');
 
-const MAP_ROWS = 13;
-const MAP_COLUMNS = 11;
-canvas.width = Boundary.width * MAP_COLUMNS;
-canvas.height = Boundary.height * MAP_ROWS;
- 
+const maps = [
+  [
+    ['1', '-', '-', '-', ']', '.', '[', '-', '-', '-', '2'],
+    ['|', '.', '.', '.', '.', '.', '.', '.', '.', 'I', '|'],
+    ['|', '.', 'b', '.', '[', '7', ']', '.', 'b', '.', '|'],
+    ['|', '.', '.', '.', '.', '|', '.', '.', '.', '.', '|'],
+    ['|', '.', '[', ']', '.', '_', '.', '[', ']', '.', '|'],
+    ['_', '.', '.', '.', '.', '.', '.', '.', '.', '.', '_'],
+    ['.', '.', 'b', '.', '[', '5', ']', '.', 'b', '.', '.'],
+    ['^', '.', '.', '.', '.', '.', '.', '.', '.', '.', '^'],
+    ['|', '.', '[', ']', '.', '^', '.', '[', ']', '.', '|'],
+    ['|', '.', '.', '.', '.', '|', '.', '.', '.', '.', '|'],
+    ['|', '.', 'b', '.', '[', '5', ']', '.', 'b', '.', '|'],
+    ['|', 'I', '.', '.', '.', '.', '.', '.', '.', 'p', '|'],
+    ['4', '-', '-', '-', ']', '.', '[', '-', '-', '-', '3']
+  ],
+  [
+    ['1', '-', '-', '-', ']', '.', '[', '-', '-', '-', '2'],
+    ['|', '.', '.', '.', '.', '.', '.', '.', '.', '.', '|'],
+    ['|', '.', '[', ']', '.', 'b', '.', '[', ']', '.', '|'],
+    ['_', '.', '.', '.', '.', '.', '.', '.', '.', '.', '_'],
+    ['.', '.', 'b', '.', '[', '5', ']', '.', 'b', '.', '.'],
+    ['^', '.', '.', '.', '.', '.', '.', '.', '.', '.', '^'],
+    ['|', '.', '[', ']', '.', 'b', '.', '[', ']', '.', '|'],
+    ['|', '.', '.', '.', '.', '.', '.', '.', '.', '.', '|'],
+    ['4', '-', '-', '-', ']', '.', '[', '-', '-', '-', '3']
+  ]
+];
+
 // 
 // Declarations
 const pellets = [];
@@ -25,13 +48,52 @@ const keys = {
 };
 
 // Animation //
+let currentLevelIndex = 1;
 let lastKey = '';
 let score = 0;
 let animationId;
 let prevMs = Date.now();
 let accumulatedTime = 0;
 const ghostReleaseIntervals = [0, 5, 10, 15];
-const boundaries = generateBoundaries();
+let boundaries = generateBoundaries(currentLevelIndex, maps);
+const ghostPositions = [
+  [
+    {
+      x: Boundary.width  * 5 + Boundary.width / 2,
+      y: Boundary.height * 5 + Boundary.height / 2
+    },
+    {
+      x: Boundary.width  * 4 + Boundary.width / 2,
+      y: Boundary.height * 6 + Boundary.height / 2 
+    },
+    {
+      x: Boundary.width  * 5 + Boundary.width / 2,
+      y: Boundary.height * 6 + Boundary.height / 2 
+    },
+    {
+      x: Boundary.width  * 6 + Boundary.width / 2,
+      y: Boundary.height * 6 + Boundary.height / 2
+    }
+  ],
+  [
+    {
+      x: Boundary.width  * 5 + Boundary.width / 2,
+      y: Boundary.height * 3 + Boundary.height / 2
+    },
+    {
+      x: Boundary.width  * 4 + Boundary.width / 2,
+      y: Boundary.height * 4 + Boundary.height / 2 
+    },
+    {
+      x: Boundary.width  * 5 + Boundary.width / 2,
+      y: Boundary.height * 4 + Boundary.height / 2 
+    },
+    {
+      x: Boundary.width  * 6 + Boundary.width / 2,
+      y: Boundary.height * 4 + Boundary.height / 2
+    }
+  ]
+];
 
 const game = {
   init() {
@@ -50,10 +112,7 @@ const game = {
 
     ghosts = [
       new Ghost({
-        position: { 
-          x: Boundary.width * 5 + Boundary.width/2,
-          y: Boundary.height * 5 + Boundary.height/2 
-        },
+        position: ghostPositions[currentLevelIndex][0],
         velocity: { 
           x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
           y: 0
@@ -62,10 +121,7 @@ const game = {
         state: 'active',
       }),
       new Ghost({
-        position: { 
-          x: Boundary.width * 4 + Boundary.width/2,
-          y: Boundary.height * 6 + Boundary.height/2 
-        },
+        position: ghostPositions[currentLevelIndex][1],
         velocity: { 
           x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
           y: 0
@@ -73,10 +129,7 @@ const game = {
         imgSrc: './img/sprites/greenGhost.png',
       }),
       new Ghost({
-        position: { 
-          x: Boundary.width * 5 + Boundary.width/2,
-          y: Boundary.height * 6 + Boundary.height/2 
-        },
+        position: ghostPositions[currentLevelIndex][2],
         velocity: { 
           x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
           y: 0
@@ -84,10 +137,7 @@ const game = {
         imgSrc: './img/sprites/orangeGhost.png',
       }),
       new Ghost({
-        position: { 
-          x: Boundary.width * 6 + Boundary.width/2,
-          y: Boundary.height * 6 + Boundary.height/2 
-        },
+        position: ghostPositions[currentLevelIndex][3],
         velocity: { 
           x: Ghost.speed * (Math.random() < 0.5) ? -1 : 1,
           y: 0
@@ -141,7 +191,6 @@ function animate() {
       if (ghost.scared) {
         ghosts.splice(i, 1);
       } else {
-        // cancelAnimationFrame(animationId);
         player.die();
         ghosts.forEach(ghost => ghost.state = 'paused');
         console.log('lose.');
@@ -150,9 +199,19 @@ function animate() {
   };
 
   // win condition goes here
-  if (pellets.length === 1) { // should be zero - not sure where extra pellet comes from
-    console.log('win.')
-    cancelAnimationFrame(animationId);
+  if (pellets.length === 1 && player.state === 'active') { // should be zero - not sure why extra pellet
+    // console.log('win.')
+    // cancelAnimationFrame(animationId);
+    player.state = 'paused';
+    ghosts.forEach(ghost => ghost.state = 'paused');
+
+    setTimeout(() => {
+      currentLevelIndex++;
+      if (currentLevelIndex > maps.length - 1) currentLevelIndex = 0;
+      boundaries = generateBoundaries(currentLevelIndex, maps);
+      game.init();
+      game.initStart();
+    }, 1000);
   };
 
   // PowerUp Collision Detection
@@ -220,7 +279,8 @@ function animate() {
   ghosts.forEach((ghost, index) => {
     ghost.update(delta, boundaries);
     
-    if (accumulatedTime > ghostReleaseIntervals[index] && !ghost.state) ghost.enterGame();
+    if (accumulatedTime > ghostReleaseIntervals[index] && !ghost.state) 
+      ghost.enterGame(ghostPositions[currentLevelIndex][2]);
   });
 
   if (player.velocity.x > 0 ) player.rotation = 0;

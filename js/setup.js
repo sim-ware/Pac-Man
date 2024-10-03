@@ -1,23 +1,12 @@
-function generateBoundaries() {
-  const map = [
-    ['1', '-', '-', '-', ']', '.', '[', '-', '-', '-', '2'],
-    ['|', '.', '.', '.', '.', '.', '.', '.', '.', 'I', '|'],
-    ['|', '.', 'b', '.', '[', '7', ']', '.', 'b', '.', '|'],
-    ['|', '.', '.', '.', '.', '|', '.', '.', '.', '.', '|'],
-    ['|', '.', '[', ']', '.', '_', '.', '[', ']', '.', '|'],
-    ['_', '.', '.', '.', '.', '.', '.', '.', '.', '.', '_'],
-    ['.', '.', 'b', '.', '[', '5', ']', '.', 'b', '.', '.'],
-    ['^', '.', '.', '.', '.', '.', '.', '.', '.', '.', '^'],
-    ['|', '.', '[', ']', '.', '^', '.', '[', ']', '.', '|'],
-    ['|', '.', '.', '.', '.', '|', '.', '.', '.', '.', '|'],
-    ['|', '.', 'b', '.', '[', '5', ']', '.', 'b', '.', '|'],
-    ['|', 'I', '.', '.', '.', '.', '.', '.', '.', 'p', '|'],
-    ['4', '-', '-', '-', ']', '.', '[', '-', '-', '-', '3']
-  ]
-
+function generateBoundaries(currentLevelIndex, maps) {
   const boundaries = [];
 
-  map.forEach((row, i) => {
+  const MAP_ROWS    = maps[currentLevelIndex].length;
+  const MAP_COLUMNS = maps[currentLevelIndex][0].length;
+  canvas.width      = Boundary.width * MAP_COLUMNS;
+  canvas.height     = Boundary.height * MAP_ROWS;
+
+  maps[currentLevelIndex].forEach((row, i) => {
     row.forEach((symbol, j) => {
       switch (symbol) {
         case '-':
