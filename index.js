@@ -12,6 +12,7 @@ canvas.height = Boundary.height * MAP_ROWS;
 // Declarations
 const pellets = [];
 const powerUps = [];
+let items = [];
 
 let ghosts = [];
 let player = {};
@@ -154,6 +155,7 @@ function animate() {
     cancelAnimationFrame(animationId);
   };
 
+  // PowerUp Collision Detection
   for (let i = powerUps.length - 1; 0 <= i; i--) {
     const powerUp = powerUps[i];
     powerUp.draw();
@@ -174,7 +176,26 @@ function animate() {
       });
     };
   };
+
+  // Item Collision Detection
+  for (let i = items.length - 1; 0 <= i; i--) {
+    const item = items[i];
+    item.draw();
+
+    if (
+      Math.hypot(
+        item.position.x - player.position.x,
+        item.position.y - player.position.y
+      ) <
+      item.radius + player.radius
+    ) {
+      items.splice(i, 1);
+      score += 50;
+      scoreEl.innerHTML = score;
+    };
+  };
   
+  // Pellet Collision Detection
   for (let i = pellets.length - 1; 0 < i; i--) {
     const pellet = pellets[i];
     pellet.draw();

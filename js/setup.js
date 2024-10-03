@@ -1,7 +1,7 @@
 function generateBoundaries() {
   const map = [
     ['1', '-', '-', '-', ']', '.', '[', '-', '-', '-', '2'],
-    ['|', '.', '.', '.', '.', '.', '.', '.', '.', '.', '|'],
+    ['|', '.', '.', '.', '.', '.', '.', '.', '.', 'I', '|'],
     ['|', '.', 'b', '.', '[', '7', ']', '.', 'b', '.', '|'],
     ['|', '.', '.', '.', '.', '|', '.', '.', '.', '.', '|'],
     ['|', '.', '[', ']', '.', '_', '.', '[', ']', '.', '|'],
@@ -11,7 +11,7 @@ function generateBoundaries() {
     ['|', '.', '[', ']', '.', '^', '.', '[', ']', '.', '|'],
     ['|', '.', '.', '.', '.', '|', '.', '.', '.', '.', '|'],
     ['|', '.', 'b', '.', '[', '5', ']', '.', 'b', '.', '|'],
-    ['|', '.', '.', '.', '.', '.', '.', '.', '.', 'p', '|'],
+    ['|', 'I', '.', '.', '.', '.', '.', '.', '.', 'p', '|'],
     ['4', '-', '-', '-', ']', '.', '[', '-', '-', '-', '3']
   ]
 
@@ -30,7 +30,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeHorizontal.png')
             })
           )
-          break
+          break;
         case '|':
           boundaries.push(
             new Boundary({
@@ -41,7 +41,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeVertical.png')
             })
           )
-          break
+          break;
         case '1':
           boundaries.push(
             new Boundary({
@@ -52,7 +52,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeCorner1.png')
             })
           )
-          break
+          break;
         case '2':
           boundaries.push(
             new Boundary({
@@ -63,7 +63,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeCorner2.png')
             })
           )
-          break
+          break;
         case '3':
           boundaries.push(
             new Boundary({
@@ -74,7 +74,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeCorner3.png')
             })
           )
-          break
+          break;
         case '4':
           boundaries.push(
             new Boundary({
@@ -85,7 +85,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeCorner4.png')
             })
           )
-          break
+          break;
         case 'b':
           boundaries.push(
             new Boundary({
@@ -96,7 +96,7 @@ function generateBoundaries() {
               image: createImage('./img/block.png')
             })
           )
-          break
+          break;
         case '[':
           boundaries.push(
             new Boundary({
@@ -107,7 +107,7 @@ function generateBoundaries() {
               image: createImage('./img/capLeft.png')
             })
           )
-          break
+          break;
         case ']':
           boundaries.push(
             new Boundary({
@@ -118,7 +118,7 @@ function generateBoundaries() {
               image: createImage('./img/capRight.png')
             })
           )
-          break
+          break;
         case '_':
           boundaries.push(
             new Boundary({
@@ -129,7 +129,7 @@ function generateBoundaries() {
               image: createImage('./img/capBottom.png')
             })
           )
-          break
+          break;
         case '^':
           boundaries.push(
             new Boundary({
@@ -140,7 +140,7 @@ function generateBoundaries() {
               image: createImage('./img/capTop.png')
             })
           )
-          break
+          break;
         case '+':
           boundaries.push(
             new Boundary({
@@ -151,7 +151,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeCross.png')
             })
           )
-          break
+          break;
         case '5':
           boundaries.push(
             new Boundary({
@@ -163,7 +163,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeConnectorTop.png')
             })
           )
-          break
+          break;
         case '6':
           boundaries.push(
             new Boundary({
@@ -175,7 +175,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeConnectorRight.png')
             })
           )
-          break
+          break;
         case '7':
           boundaries.push(
             new Boundary({
@@ -187,7 +187,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeConnectorBottom.png')
             })
           )
-          break
+          break;
         case '8':
           boundaries.push(
             new Boundary({
@@ -198,7 +198,7 @@ function generateBoundaries() {
               image: createImage('./img/pipeConnectorLeft.png')
             })
           )
-          break
+          break;
         case '.':
           pellets.push(
             new Pellet({
@@ -208,7 +208,7 @@ function generateBoundaries() {
               }
             })
           )
-          break
+          break;
         case 'p':
           powerUps.push(
             new PowerUp({
@@ -218,7 +218,18 @@ function generateBoundaries() {
               }
             })
           )
-          break
+          break;
+        case 'I':
+          items.push(
+            new Item({
+              position: {
+                x: j * Boundary.width + Boundary.width / 2,
+                y: i * Boundary.height + Boundary.height / 2
+              },
+              imgSrc: './img/sprites/cherry.png'
+            })
+          )
+          break;
       }
     })
   });
